@@ -31,9 +31,9 @@ public class MealRestController {
         return service.delete(id);
     }
 
-    public MealTo get(int id, int userId) {
+    public Meal get(int id) {
         log.info("get {}", id);
-        return service.get(id, userId);
+        return service.get(id);
     }
 
     public Collection<MealTo> getAll() {

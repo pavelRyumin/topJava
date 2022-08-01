@@ -6,6 +6,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,10 +29,8 @@ public class MealService {
         return repository.delete(id);
     }
 
-    public MealTo get(int id, int userId) {
-        Collection<Meal> meals = new ArrayList<>();
-        meals.add(repository.get(id, userId));
-        return MealsUtil.getTos(meals, MealsUtil.DEFAULT_CALORIES_PER_DAY).get(0);
+    public Meal get(int id) {
+        return repository.get(id, SecurityUtil.authUserId());
     }
 
     public Collection<MealTo> getAll() {
