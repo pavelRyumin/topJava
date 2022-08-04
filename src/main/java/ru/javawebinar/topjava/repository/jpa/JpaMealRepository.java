@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.repository.jpa;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import javax.persistence.EntityManager;
@@ -20,15 +21,14 @@ public class JpaMealRepository implements MealRepository {
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
+        meal.setUser(em.getReference(User.class, userId));
         if (meal.isNew()) {
             em.persist(meal);
             return meal;
-        } else {
-            if (get(meal.id(), userId) != null) {
-                return em.merge(meal);
-            }
+        } else if (get(meal.id(), userId) == null) {
+            return null;
         }
-        return null;
+        return em.merge(meal);
     }
 
     @Override
@@ -42,10 +42,8 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        if (em.find(Meal.class, id).getUser().getId() == userId) {
-            return em.find(Meal.class, id);
-        }
-        return null;
+        Meal meal = em.find(Meal.class, id);
+        return meal != null && meal.getUser().getId() == userId ? meal : null;
     }
 
     @Override
@@ -57,7 +55,7 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return em.createNamedQuery(Meal.BETWEEN_HALF_OPEN, Meal.class)
+        return em.createNamedQuery(Meal.GET_BETWEEN, Meal.class)
                 .setParameter("userId", userId)
                 .setParameter("startDateTime", startDateTime)
                 .setParameter("endDateTime", endDateTime)
