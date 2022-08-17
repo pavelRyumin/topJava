@@ -4,18 +4,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
+import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.UserTestData.USER_ID;
 import static ru.javawebinar.topjava.UserTestData.user;
 import static ru.javawebinar.topjava.util.MealsUtil.getTos;
 
 class MealRestControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = MealRestController.REST_URL;
+    private static final String REST_URL = MealRestController.REST_URL + "/";
 
     @Autowired
     MealService mealService;
@@ -43,7 +46,16 @@ class MealRestControllerTest extends AbstractControllerTest {
     void createWithLocation() {
     }
 
-    void update() {
+    @Test
+    void update() throws Exception {
+        Meal meal = getUpdated();
+        perform(MockMvcRequestBuilders.put(REST_URL + MEAL1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(meal)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        MEAL_MATCHER.assertMatch(mealService.get(MEAL1_ID, USER_ID), meal);
     }
 
     void getBetween() {
