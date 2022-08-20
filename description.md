@@ -9,8 +9,6 @@ Hibernate, делаем конверторы для типов LocalDateTime (Ja
 - Большое внимание уделяется деталям: популяция базы, использование транзакционности, тесты сервисов и REST контроллеров, настройка EntityManagerFactory, выбор реализации пула коннектов. Особое внимание уделяется работе с базой: через Spring JDBC, Spring ORM и Spring Data Jpa.
 - Используются самые востребованные на сегодняшний момент фреймворки: Maven, Spring Security 4 вместе с Spring Security Test, наиболее удобный для работы с базой проекта Spring Data Jpa, библиотека логирования logback, реализующая SLF4J, повсеместно используемый Bootstrap и jQuery.
 
-#### <a href="http://topjava.herokuapp.com/" target=_blank>Демо разрабатываемого приложения</a>
-
 ## План проекта (ссылки на некоторые темы открыты для просмотра)
 ### Архитектура проекта. Персистентность.
 - <a href="https://drive.google.com/file/d/0B9Ye2auQ_NsFSUNrdVc0bDZuX2s/view?usp=sharing&resourcekey=0-6scb0PBj2A3Oqf6rsU2egQ">Системы управления версиями</a>
